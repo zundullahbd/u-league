@@ -14,7 +14,7 @@
     </div> 
 
     <div class="p-5 mt-2 mb-2 text-dark">
-        <form method="POST" id="addPemainForm">
+        <form method="POST" id="addPelatihForm">
           {% csrf_token %}
           <table>
             <tr>
@@ -22,7 +22,7 @@
             </tr>
             <tr>
                 <div class="form-floating">
-                    <select class="form-select form-control" name="pemain" id="addPemain"
+                    <select class="form-select form-control" name="pemain" id="addPelatih"
                         aria-label="Default select example"
                         style="padding-top: 1rem; padding-bottom: 0rem;font-size:13px; height: 4rem; line-height: 1.5;">
                         <option disabled selected>--- Pilih Pelatih ---</option>
@@ -30,7 +30,7 @@
                         <option value="Pelatih FGH" > Pelatih FGH - Tangkapan </option>
                         <option value="..." > ... </option>
                     </select>
-                    <label for="addPemain">  Pelatih - Spesialisasi </label>
+                    <label for="addPelatih">  Pelatih - Spesialisasi </label>
                 </div>
             </tr>
           </table> 
