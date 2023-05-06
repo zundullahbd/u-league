@@ -21,4 +21,5 @@ from django.conf.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tim/', include('manage_tim.urls')),
+    path('manage_pertandingan/', include('manage_pertandingan.urls')),
 ]
