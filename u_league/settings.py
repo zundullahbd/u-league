@@ -40,8 +40,13 @@ INSTALLED_APPS = [
     'manage_tim',
     'manage_pertandingan',
     'crud_pertandingan',
+<<<<<<< HEAD
     'cru_peminjamanstadium'
     'r_listpertandingan'
+=======
+    'cru_peminjamanstadium',
+    'r_listpertandingan',
+>>>>>>> 29215f386857b7044195600a791824d56812f75c
     'historyrapat'
 ]
 

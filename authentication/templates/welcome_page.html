@@ -1,0 +1,82 @@
+{% extends 'baseTemplates.html' %}
+{% load static %}
+
+
+{% block content %}
+    <style>
+
+  
+        .main .heading{
+            position: absolute;
+            height:auto;
+            width:100%;
+            top:50%;
+            transform: translateY(-50%);
+            text-align: center;
+        }
+        .main .heading .head{
+            position: relative;
+            font-family: 'RacingSansOne',sans-serif;
+            font-size:48px;
+            font-weight: 600; 
+            color:black;
+        }
+        .main .heading .head span{
+            color:#01870E;
+        }
+
+        btn{
+            border-radius: 15px;
+        }
+        .main .heading  .sub{
+            position: relative;
+            font-family: "Roboto", sans-serif;
+            font-size:22px;
+            font-weight: 300; 
+            color: black;
+        }
+        .main .heading .btns{
+            height:auto;
+            width:100%;
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .main .heading .btns a{
+            color:white;
+            text-align: center;
+            text-decoration: none;
+            font-family: "Roboto", sans-serif;
+            font-size:15px;
+            font-weight:300;
+            display:block;
+            height:auto;
+            width:150px;
+            padding:10px;
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            margin-left:1%;
+            border-radius: 2px;
+            background-color: black;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="main">
+		<div class="overlay"></div>
+		
+		<div class="heading">
+				<h1 class="head">SELAMAT DATANG DI <span>U-LEAGUE - C4</span></h1>
+				<h3 class="sub" style="padding-top: 20px;">Silahkan Login atau Register</h3>	
+				<div class="btns" action="" method="POST" style="padding-top: 20px;">
+					<a class="btn btn-md" onclick="location.href = '/login'" style="border-radius: 8px;">LOGIN</a>
+					<a class="btn btn-md" onclick="location.href = '/register'" style="border-radius: 8px;">REGISTER</a>
+				</div>	
+		</div>
+	</div>	
+ {% endblock %}
