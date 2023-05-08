@@ -1,4 +1,4 @@
-{% extends 'baseTemplates.html' %}
+{% extends 'base_templates.html' %}
 {% load static %}
 
 
@@ -14,7 +14,7 @@
         .form {
             position: relative;
             z-index: 1;
-            background: #FFFFFF;
+            background: #0000;
             max-width: 360px;
             margin: 0 auto 100px;
             padding: 45px;
@@ -24,16 +24,18 @@
         .form input {
             font-family: "Roboto", sans-serif;
             outline: 0;
-            background: #f2f2f2;
+            background: #E5E4E2;
             width: 100%;
             border: 0;
-            margin: 0 0 15px;
+            margin: 20 0 0px;
             padding: 15px;
             box-sizing: border-box;
             font-size: 14px;
+            color: black;
+
         }
         .form button {
-            font-family: "Roboto", sans-serif;
+            font-family: "Roboto Bold", sans-serif;
             text-transform: uppercase;
             outline: 0;
             background: black;
@@ -47,15 +49,15 @@
             cursor: pointer;
         }
         .form button:hover,.form button:active,.form button:focus {
-         background: #43A047;
+         background: #1f40cb;
         }
         .form .message {
             margin: 15px 0 0;
-            color: #b3b3b3;
+            color: #00000;
             font-size: 12px;
         }
         .form .message a {
-            color: #4CAF50;
+            color: #1f40cb;
             text-decoration: none;
         }
         .form .register-form {
@@ -85,19 +87,19 @@
             color: #1a1a1a;
         }
         .container .info span {
-            color: #4d4d4d;
+            color: #1f40cb;
             font-size: 12px;
         }
         .container .info span a {
-            color: #000000;
+            color: #1f40cb;
             text-decoration: none;
         }
         .container .info span .fa {
-            color: #EF3B3A;
+            color: #1f40cb;
         }
         body {
-            background: white;
-            font-family: "Roboto", sans-serif;
+            background: black;
+            font-family: "Roboto Bold", sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;      
         }

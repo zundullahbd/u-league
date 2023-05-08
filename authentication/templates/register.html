@@ -1,4 +1,4 @@
-{% extends 'baseTemplates.html' %}
+{% extends 'base_templates.html' %}
 {% load static %}
 
 
@@ -27,19 +27,19 @@
             background: #f2f2f2;
             width: 100%;
             border: 0;
-            margin: 0 0 15px;
+            margin: 20 0 0px;
             padding: 15px;
             box-sizing: border-box;
             font-size: 14px;
         }
         .form button {
-            font-family: "Roboto", sans-serif;
+            font-family: "Roboto Bold", sans-serif;
             text-transform: uppercase;
             outline: 0;
             background: black;
             width: 50%;
             border: 0;
-            padding: 8px;
+            padding: 5px;
             color: #FFFFFF;
             font-size: 14px;
             -webkit-transition: all 0.3 ease;
@@ -47,7 +47,8 @@
             cursor: pointer;
         }
         .form button:hover,.form button:active,.form button:focus {
-         background: #43A047;
+         background: #1f40cb;
+         color: #FFFFFF;
         }
         .form .message {
             margin: 15px 0 0;
@@ -55,7 +56,7 @@
             font-size: 12px;
         }
         .form .message a {
-            color: #4CAF50;
+            color: #00a2ed;
             text-decoration: none;
         }
         .form .register-form {
@@ -96,7 +97,7 @@
         }
         body {
             background: white;
-            font-family: "Roboto", sans-serif;
+            font-family: "Roboto Bold", sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;      
         }
@@ -127,7 +128,7 @@
                 <div class="text-center pt-1 mb-5 pb-1">
                     <a>
                         <button class="btn btn-sm" id="jenisAkunButton" 
-                        type="button" onclick="chooseRole()" style="background:  #01870E">Pilih</button>
+                        type="button" onclick="chooseRole()">Pilih</button>
                     </a>
                     <p class="message">Sudah punya akun?<a href="/login/"> Login</a></p>
                 </div>

@@ -1,4 +1,4 @@
-{% extends 'baseTemplates.html' %}
+{% extends 'base_templates.html' %}
 {% load static %}
 
 
@@ -19,14 +19,18 @@
             font-family: 'RacingSansOne',sans-serif;
             font-size:48px;
             font-weight: 600; 
-            color:black;
+            color:#0000";
         }
         .main .heading .head span{
-            color:#01870E;
+            color:#1f40cb
         }
 
         btn{
             border-radius: 15px;
+        }
+        
+        .main button:hover,.main button:active,.main button:focus {
+            background: #00a2ed;
         }
         .main .heading  .sub{
             position: relative;
@@ -71,7 +75,7 @@
 		<div class="overlay"></div>
 		
 		<div class="heading">
-				<h1 class="head">SELAMAT DATANG DI <span>U-LEAGUE - C4</span></h1>
+				<h1 class="head">SELAMAT DATANG DI <span>U-LEAGUE  C4</span></h1>
 				<h3 class="sub" style="padding-top: 20px;">Silahkan Login atau Register</h3>	
 				<div class="btns" action="" method="POST" style="padding-top: 20px;">
 					<a class="btn btn-md" onclick="location.href = '/login'" style="border-radius: 8px;">LOGIN</a>
