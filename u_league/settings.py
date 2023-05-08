@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'manage_tim',
     'manage_pertandingan',
     'crud_pertandingan',
+    'cru_peminjamanstadium',
+    'r_listpertandingan',
+    'historyrapat'
 ]
 
 MIDDLEWARE = [
