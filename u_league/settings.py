@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'manage_tim',
     'manage_pertandingan',
     'crud_pertandingan',
+    'mulai_rapat',
+    'mulai_pertandingan',
+    'pembelian_tiket',
 ]
 
 MIDDLEWARE = [

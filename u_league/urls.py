@@ -21,4 +21,7 @@ from django.conf.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tim/', include('manage_tim.urls')),
+    path('mulai-pertandingan/', include('mulai_pertandingan.urls')),
+    path('mulai-rapat/', include('mulai_rapat.urls')),
+    path('pembelian/', include('pembelian_tiket.urls')),
 ]
