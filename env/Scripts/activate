@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\sissy\Downloads\tugas-uleague\u-league\env"
+VIRTUAL_ENV="C:\Users\LENOVO\Documents\Universitas Indonesia\Fasilkom\Semester 4\Basis Data\u-league\env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
