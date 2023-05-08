@@ -23,4 +23,7 @@ urlpatterns = [
     path('tim/', include('manage_tim.urls')),
     path('manage_pertandingan/', include('manage_pertandingan.urls')),
     path('crud_pertandingan/', include('crud_pertandingan.urls')),
+    path('cru_peminjamanruangan/', include('cru_peminjamanruangan.urls')),
+    path('r_listpertandingan/', include('r_listpertandingan.urls')),
+    path('historyrapat/', include('historyrapat.urls'))
 ]
