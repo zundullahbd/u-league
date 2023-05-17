@@ -1,6 +1,5 @@
 {
     "version": 2,
-    "framework": "python3",
     "builds": [
         {
             "src": "u-league/wsgi.py",
