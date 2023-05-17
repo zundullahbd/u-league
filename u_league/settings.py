@@ -70,7 +70,7 @@ ROOT_URLCONF = 'u_league.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates/", "static/")],
+        'DIRS': [os.path.join(BASE_DIR, "templates/")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -92,16 +92,16 @@ WSGI_APPLICATION = 'u_league.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('PGNAME'),
-        'URL': os.getenv('DATABASE_URL'),
-        'USER': os.getenv('PGUSER'),
-        'PASSWORD': os.getenv('PGPASSWORD'),
-        'HOST': os.getenv('PGHOST'),
-        'PORT': os.getenv('PGPORT'),
+        'URL' : "postgresql://postgres:Jav7K2gSmiyZg3Nrymph@containers-us-west-78.railway.app:7703/railway",
+        'NAME' : "railway",
+        'HOST' : "containers-us-west-78.railway.app",
+        'PASSWORD' : "Jav7K2gSmiyZg3Nrymph",
+        'PORT'  : "7703",
+        'PGUSER': "postgres"
     }
 }
 
-# DATABASES['default'] = dj_database_url.config()
+DATABASES['default'] = dj_database_url.config()
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
