@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
-from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +28,9 @@ SECRET_KEY = 'django-insecure-d!t6oimpv3h3)5$t%j=mbh(*hwehlwdb1y!7@o7b^$&=wfc=0e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost', '127.0.0.1', 'u-league.up.railway.app',
+]
 
 
 # Application definition
@@ -91,17 +92,10 @@ WSGI_APPLICATION = 'u_league.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'URL' : "postgresql://postgres:Jav7K2gSmiyZg3Nrymph@containers-us-west-78.railway.app:7703/railway",
-        'NAME' : "railway",
-        'HOST' : "containers-us-west-78.railway.app",
-        'PASSWORD' : "Jav7K2gSmiyZg3Nrymph",
-        'PORT'  : "7703",
-        'PGUSER': "postgres"
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-DATABASES['default'] = dj_database_url.config()
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
