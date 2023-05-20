@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-d!t6oimpv3h3)5$t%j=mbh(*hwehlwdb1y!7@o7b^$&=wfc=0e
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost', '127.0.0.1', 'u-league.up.railway.app',
+    'localhost', '127.0.0.1', 'u-league-proj.up.railway.app',
 ]
 
 
@@ -132,7 +132,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
