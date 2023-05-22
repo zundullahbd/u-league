@@ -1,18 +1,42 @@
+{% include 'manager_templates.html' %}
+{% load static %}
+
 <!doctype html>
 <html lang="en">
 
 <head>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-  <style>
+    <style>
+      p {
+          text-align: center;
+      }
+      
+      label{
+          font-size: 12px;
+          font-weight: bold;
+          color: black;
+      }
+
+      .lowbutton {
+        font-size: 17px; 
+        border-radius: 18px; 
+        width:18rem;
+      }
+
+      .a{
+            font-size: 30px;
+            font-weight: bold;
+            color: black;
+            text-align: center;
+        }
+
+      
   </style>
 </head>
 
 <body>
-    <div class="p-5 text-light" style="background: #051c2c">
-        <h2 class="fw"> Daftar Pelatih </h1>
-    </div> 
-
+  
+    <h2 class="a"> Daftar Pelatih </h1>
+  
     <div class="p-5 mt-2 mb-2 text-dark">
         <form method="POST" id="addPelatihForm">
           {% csrf_token %}
@@ -24,13 +48,12 @@
                 <div class="form-floating">
                     <select class="form-select form-control" name="pemain" id="addPelatih"
                         aria-label="Default select example"
-                        style="padding-top: 1rem; padding-bottom: 0rem;font-size:13px; height: 4rem; line-height: 1.5;">
+                        style="padding-top: 1rem; padding-bottom: 0rem;font-size:13px; height: 3.5rem; line-height: 1.5;">
                         <option disabled selected>--- Pilih Pelatih ---</option>
-                        <option value="Pelatih FGH" > Pelatih FGH - Sundungan </option>
-                        <option value="Pelatih FGH" > Pelatih FGH - Tangkapan </option>
-                        <option value="..." > ... </option>
+                        {% for pelatih in pelatih_tersedia_list %}
+                        <option value={{pelatih.0}} > {{pelatih.1}} - {{pelatih.2}} </option>
+                        {% endfor %}
                     </select>
-                    <label for="addPelatih">  Pelatih - Spesialisasi </label>
                 </div>
             </tr>
           </table> 
@@ -39,8 +62,9 @@
       
 
     <p style="text-align: center">
-      <a class="btn btn-dark m-3" role="button" 
-        style="font-size: 17px; border-radius: 20px; width:12rem">Submit</a>
+      <a href="{% url 'manager:show_teamdetail' %}"
+        class="btn btn-dark m-3 lowbutton" role="button" 
+        style="color:white">Submit</a>
     </p>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
