@@ -39,6 +39,16 @@
 </head>
 <body>
     <h1 class="a" >Form Registrasi</h1>
+    <div class="container mr-2" style="align-items: center;">
+        {% for message in messages %}
+          <div class="alert alert-danger alert-dismissable fade show w-75" role="alert" 
+          style="margin-top: 3rem">
+            {{ message }}
+            <a type="button" class="close" data-dismiss="alert" aria-label="Close"
+            style="color: darkred" role="button">&times;</a>
+          </div>
+        {% endfor %}
+        </div>
     <div class="container" style="padding: 20px;">
       <div class="p-5 mt-2 mb-2 text-dark">
         <form method="POST" id="teamForm">
@@ -58,13 +68,17 @@
                 id="uni_name" class="form-control">
             </tr>
           </table> 
+          <p style="text-align: center">
+            <button type="submit" class="btn btn-dark m-3 lowbutton" role="button"
+              style="background: #051c2c; color:white"> Daftar </button>
+          </p>
       </form>
       </div>
       
-      <p style="text-align: center">
+      <!-- <p style="text-align: center">
         <a href="{% url 'manager:show_teamdetail' %}" class="btn btn-dark m-3" role="button" 
           style="font-size: 17px; border-radius: 20px; color:white; width:15rem">Daftar</a>
-      </p>
+      </p> -->
     </div>
 
     {% endblock %}
