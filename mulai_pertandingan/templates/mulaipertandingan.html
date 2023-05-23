@@ -1,5 +1,8 @@
 <!DOCTYPE html>
+{% extends "panitia_templates.html" %}
+
 <html>
+    {% block content %}
   <head>
     <title>Mulai Pertandingan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -22,9 +25,13 @@
         <tr>
           <td>Chelsea</td>
           <td>Barcelona</td>
-          <td><a href="peristiwa">Masukkan Peristiwa Tim 1</a>
+          <td><a class="btn text-light p-1" role="button" 
+            style="font-size: 14px; border-radius: 14px; width:15rem; background: #1f40cb">
+            Masukkan Peristiwa Tim 1</a>
           <br>
-          <a href="peristiwa">Masukkan Peristiwa Tim 2</a></td>
+          <a class="btn text-light p-1" role="button" 
+            style="font-size: 14px; border-radius: 14px; width:15rem; background: #1f40cb">
+            Masukkan Peristiwa Tim 2</a></td>
         </tr>
         
       </tbody>
@@ -32,11 +39,12 @@
     </div>
     <p style="text-align: center">
         <a class="btn btn-dark m-3" role="button" 
-          style="font-size: 17px; border-radius: 20px; width:12rem">Submit</a>
+          style="font-size: 17px; border-radius: 20px; width:12rem; color:white">Submit</a>
       </p>
     
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
       crossorigin="anonymous"></script>
   </body>
+  {% endblock %}
 </html>
