@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en">
+{% include 'manager_templates.html' %}
 
+{% block content %}
 <head>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
@@ -9,7 +11,7 @@
 </head>
 <body>
     <div class="p-5 text-light" style="background-image: linear-gradient(to bottom right, #051c2c, #000000)">
-        <h2 class="fw">List Pertandingan</h2>
+        <h2 class="a">List Pertandingan</h2>
       </div>
     <style>
         .container {
@@ -44,4 +46,5 @@
         </tbody>
       </table>
     </div>
+{% endblock%}
 </html>
