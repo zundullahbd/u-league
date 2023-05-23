@@ -4,6 +4,8 @@ import psycopg2
 import locale
 import uuid
 from utils.query import *
+from django.views.decorators.csrf import csrf_exempt
+
 locale.setlocale(locale.LC_ALL, '')
 
 from django.http import HttpResponse
@@ -13,6 +15,7 @@ from django.urls import reverse
 def manager_home(request):
     return render(request, 'manager_home.html')
 
+@csrf_exempt
 def mengelola_tim(request):
     username = "amartusewicz2"
 
@@ -33,6 +36,7 @@ def mengelola_tim(request):
     
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def show_timregist(request):
     username = "amartusewicz2"
     if request.method == 'POST':
@@ -62,6 +66,7 @@ def show_timregist(request):
     
     return render(request, "teamregist.html")
 
+@csrf_exempt
 def show_teamdetail(request):
     context = {}
 
@@ -92,6 +97,7 @@ def show_teamdetail(request):
 
     return render(request, "teamdetail.html", context=context)
 
+@csrf_exempt
 def show_addpemain(request):
     context = {}
     
@@ -108,7 +114,7 @@ def show_addpemain(request):
 
     return render(request, "addpemain.html", context=context)
 
-
+@csrf_exempt
 def show_addpelatih(request):
     context = {}
 
@@ -128,6 +134,7 @@ def show_addpelatih(request):
     
     return render(request, "addpelatih.html", context=context)
 
+@csrf_exempt
 def add_player(request):
     context = {}
     username = "amartusewicz2"
@@ -142,6 +149,7 @@ def add_player(request):
 
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def add_coach(request):
     context = {}
     username = "amartusewicz2"
@@ -163,6 +171,7 @@ def add_coach(request):
 
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def make_captain(request):
     context = {}
 
@@ -183,7 +192,7 @@ def make_captain(request):
 
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
-
+@csrf_exempt
 def delete_pemain(request):
     context = {}
 
@@ -197,6 +206,7 @@ def delete_pemain(request):
 
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def delete_pelatih(request):
     context = {}
 
@@ -213,6 +223,7 @@ def delete_pelatih(request):
 
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def get_team(username):
     id_manager = query(f"""
     SELECT id_manajer 
@@ -229,6 +240,7 @@ def get_team(username):
 
     return the_team[0]['nama_tim']
 
+@csrf_exempt
 def extract_string_before_word(string, word):
     split_string = string.split(word)
     if len(split_string) > 1:
