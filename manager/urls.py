@@ -10,4 +10,9 @@ urlpatterns = [
         path('detail/', views.show_teamdetail, name='show_teamdetail'),
         path('pemain/', views.show_addpemain, name='show_addpemain'),
         path('pelatih/', views.show_addpelatih, name='show_addpelatih'),
+        path('update_captain/', views.make_captain, name='make_captain'),
+        path('delete_pemain/', views.delete_pemain, name='delete_pemain'),
+        path('delete_pelatih/', views.delete_pelatih, name='delete_pelatih'),
+        path('add_coach/', views.add_coach, name='add_coach'),
+        path('add_player/', views.add_player, name='add_player'),
 ]

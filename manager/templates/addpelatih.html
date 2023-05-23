@@ -5,71 +5,65 @@
 <html lang="en">
 
 <head>
-    <style>
-      p {
-          text-align: center;
-      }
-      
-      label{
-          font-size: 12px;
-          font-weight: bold;
-          color: black;
-      }
+  <style>
+    p {
+      text-align: center;
+    }
 
-      .lowbutton {
-        font-size: 17px; 
-        border-radius: 18px; 
-        width:18rem;
-      }
+    label {
+      font-size: 12px;
+      font-weight: bold;
+      color: black;
+    }
 
-      .a{
-            font-size: 30px;
-            font-weight: bold;
-            color: black;
-            text-align: center;
-        }
+    .lowbutton {
+      font-size: 17px;
+      border-radius: 18px;
+      width: 18rem;
+    }
 
-      
+    .a {
+      font-size: 30px;
+      font-weight: bold;
+      color: black;
+      text-align: center;
+    }
   </style>
 </head>
 
 <body>
-  
-    <h2 class="a"> Daftar Pelatih </h1>
-  
-    <div class="p-5 mt-2 mb-2 text-dark">
-        <form method="POST" id="addPelatihForm">
-          {% csrf_token %}
-          <table>
-            <tr>
-                <p class="title-input mt-0 mb-1 ml-3 fw-bold" style="font-size: 15px; text-align:left"> Pelatih yang mau didaftarkan:</p>
-            </tr>
-            <tr>
-                <div class="form-floating">
-                    <select class="form-select form-control" name="pemain" id="addPelatih"
-                        aria-label="Default select example"
-                        style="padding-top: 1rem; padding-bottom: 0rem;font-size:13px; height: 3.5rem; line-height: 1.5;">
-                        <option disabled selected>--- Pilih Pelatih ---</option>
-                        {% for pelatih in pelatih_tersedia_list %}
-                        <option value={{pelatih.0}} > {{pelatih.1}} - {{pelatih.2}} </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </tr>
-          </table> 
-        </form>
-    </div>
-      
 
-    <p style="text-align: center">
-      <a href="{% url 'manager:show_teamdetail' %}"
-        class="btn btn-dark m-3 lowbutton" role="button" 
-        style="color:white">Submit</a>
-    </p>
+  <h2 class="a"> Daftar Pelatih </h1>
+    <form method="POST" action="{% url 'manager:add_coach' %}">
+      <div class="p-5 mt-2 mb-2 text-dark">
+        {% csrf_token %}
+        <table>
+          <tr>
+            <p class="title-input mt-0 mb-1 ml-3 fw-bold" style="font-size: 15px; text-align:left"> Pelatih yang mau
+              didaftarkan:</p>
+          </tr>
+          <tr>
+            <div class="form-floating">
+              <select class="form-select form-control" name="coach" id="addPelatih" aria-label="Default select example"
+                style="padding-top: 1rem; padding-bottom: 0rem;font-size:13px; height: 3.5rem; line-height: 1.5;">
+                <option disabled selected>--- Pilih Pelatih ---</option>
+                {% for pelatih in pelatih_tersedia_list %}
+                <option value={{pelatih.0}}> {{pelatih.1}} - {{pelatih.2}} </option>
+                {% endfor %}
+              </select>
+            </div>
+          </tr>
+        </table>
+        <p style="text-align: center">
+          <button type="submit" class="btn btn-dark m-3 lowbutton" role="button" 
+          style="background: #051c2c; color:white"> Submit </button>
+        </p>
+      </div>    
+    </form>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
-    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+      crossorigin="anonymous"></script>
 </body>
 
 </html>
