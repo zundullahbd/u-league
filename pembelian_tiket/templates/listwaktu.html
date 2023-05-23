@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+{% extends "penonton_templates.html" %}
 <html>
+    {% block content %}
   <head>
     <title>List Waktu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -20,7 +22,9 @@
       <tbody>
         <tr>
           <td>07.00 - 09.00</td>
-          <td><a href="pilihperistiwa.html">Next</a>
+          <td><a class="btn text-light p-1" role="button"
+            style="font-size: 14px; border-radius: 14px; width:8rem; background: #1f40cb">
+            Next</a></td>
         </tr>
         
       </tbody>
@@ -31,4 +35,5 @@
       integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
       crossorigin="anonymous"></script>
   </body>
+  {% endblock content %}
 </html>
