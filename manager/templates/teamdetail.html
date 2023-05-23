@@ -79,20 +79,20 @@
             <tbody class="text-light">
               {% for pemain in pemain_list %}
               <tr>
-                <td>{{pemain.1}}</td>
-                <td>{{pemain.2}}</td>
-                <td>{{pemain.3}}</td>
-                {% if pemain.4 == True %}
+                <td>{{pemain.nama_pemain}}</td>
+                <td>{{pemain.nomor_hp}}</td>
+                <td>{{pemain.tgl_lahir}}</td>
+                {% if pemain.is_captain == True %}
                   <td> ✅ </td>
-                {% elif pemain.4 == False %}  
+                {% elif pemain.is_captain == False %}  
                   <td> ❌ </td>
                 {% endif %}
-                <td>{{pemain.5}}</td>
-                <td>{{pemain.6}}</td>
-                <td>{{pemain.7}}</td>
+                <td>{{pemain.posisi}}</td>
+                <td>{{pemain.npm}}</td>
+                <td>{{pemain.jenjang}}</td>
                  
                 <td>
-                  {% if pemain.4 == False %} 
+                  {% if pemain.is_captain == False %} 
                   <form METHOD="POST" action="{% url 'manager:make_captain' %}"> 
                     {% csrf_token %}
                     <p style="text-align: center; margin-bottom: 3px;">
@@ -112,7 +112,7 @@
                   <form METHOD="POST" action="{% url 'manager:delete_pemain' %}"> 
                     {% csrf_token %}
                     <input class="hidden"  
-                        value='{{pemain.0}}' type="text" name="player"></input>
+                        value='{{pemain.id_pemain}}' type="text" name="player"></input>
                         <button type="submit"  class="action hover:underline" 
                         style="background: #DC3545"> Delete </button>
                   <!-- <p style="text-align: center">
@@ -145,22 +145,18 @@
             <tbody class="text-light">
               {% for pelatih in pelatih_list %}
               <tr>
-                <td>{{pelatih.1}}</td>
-                <td>{{pelatih.2}}</td>
-                <td>{{pelatih.3}}</td>
-                <td>{{pelatih.4}}</td>
-                <td>{{pelatih.5}}</td>
+                <td>{{pelatih.nama_pelatih}}</td>
+                <td>{{pelatih.nomor_hp}}</td>
+                <td>{{pelatih.email}}</td>
+                <td>{{pelatih.alamat}}</td>
+                <td>{{pelatih.spesialisasi}}</td>
                 <td>
                   <form METHOD="POST" action="{% url 'manager:delete_pelatih' %}"> 
                     {% csrf_token %}
                   <input class="hidden"  
-                      value='{{pelatih.0}}' type="text" name="coach"></input>
+                      value='{{pelatih.id_pelatih}}' type="text" name="coach"></input>
                       <button type="submit"  class="action hover:underline" 
                       style="background: #DC3545"> Delete </button> 
-                  <!-- <p style="text-align: center">
-                    <a class="btn btn-danger text-light m-0 action" role="button">
-                      Delete</a>
-                  </p> -->
                   </form>
                 </td>
               </tr>

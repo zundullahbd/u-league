@@ -3,6 +3,7 @@ from django.contrib import messages
 import psycopg2
 import locale
 import uuid
+from utils.query import *
 locale.setlocale(locale.LC_ALL, '')
 
 from django.http import HttpResponse
@@ -17,21 +18,28 @@ def show_timregist(request):
 
 def show_teamdetail(request):
     context = {}
-    db_connection = psycopg2.connect(
-        host="localhost",
-        database="fauziah.putri11",
-        port="5433",
-        user="postgres",
-        password="putisql123"
-    )
-    cursor = db_connection.cursor()
     
-    cursor.execute("set search_path to uleague")
+    nama_tim = "Manchester United"
+
+    query_get_pemain = query(f"""
+    SELECT Pm.ID_Pemain, CONCAT(Pm.Nama_Depan, ' ', Pm.Nama_Belakang) as Nama_Pemain, Nomor_HP, Tgl_Lahir, Is_Captain, Posisi, NPM, Jenjang 
+    FROM PEMAIN Pm WHERE Pm.Nama_Tim = '{nama_tim}'
+    """)
+
+    query_get_pelatih = query(f"""
+    SELECT Pl.ID_Pelatih, CONCAT(Nama_Depan, ' ', Nama_Belakang) as Nama_Pelatih, Nomor_HP, Email, Alamat, Spesialisasi 
+    FROM Non_Pemain Np, Pelatih Pl, Spesialisasi_Pelatih Sp 
+    WHERE Np.ID = Pl.ID_Pelatih
+    and Pl.ID_Pelatih = Sp.ID_Pelatih
+    and Pl.Nama_Tim = '{nama_tim}'
+    """)
+
+    print("halo")
     context = {
-        'pemain_list' : get_pemain("Manchester United", cursor),
-        'pelatih_list' : get_pelatih("Manchester United", cursor)
-        }
-    db_connection.close()
+        'pemain_list' : query_get_pemain,
+        'pelatih_list' : query_get_pelatih
+    }
+
     return render(request, "teamdetail.html", context=context)
 
 def show_addpemain(request):
@@ -64,17 +72,8 @@ def show_addpemain(request):
 
 def show_addpelatih(request):
     context = {}
-    db_connection = psycopg2.connect(
-        host="localhost",
-        database="fauziah.putri11",
-        port="5433",
-        user="postgres",
-        password="putisql123"
-    )
-    cursor = db_connection.cursor()
-    
-    cursor.execute("set search_path to uleague")
-    pelatih_tersedia_list = cursor.execute( """
+
+    pelatih_tersedia_list = query( f"""
             SELECT Pl.ID_Pelatih, CONCAT(Nama_Depan, ' ', Nama_Belakang) as Nama_Pelatih, string_agg(Spesialisasi, ', ') as Jenis_Spesialisasi
             FROM Non_Pemain Np, Pelatih Pl, Spesialisasi_Pelatih Sp
             WHERE Np.ID = Pl.ID_Pelatih
@@ -83,13 +82,13 @@ def show_addpelatih(request):
             group by 1, 2
             ORDER BY Nama_Pelatih ASC;;
             """)
-    pelatih_tersedia_list = cursor.fetchall()
 
     context = {
         'pelatih_tersedia_list' : pelatih_tersedia_list
         }
     
-    db_connection.close()
+    print(pelatih_tersedia_list)
+    
     return render(request, "addpelatih.html", context=context)
 
 def add_player(request):
@@ -116,6 +115,8 @@ def add_player(request):
             messages.error(request, e)
             print('ERROR NIH')
             db_connection.rollback()
+            db_connection.close()
+            return render(request, 'addpelatih.html', context)
 
     db_connection.close()
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
@@ -141,34 +142,14 @@ def add_coach(request):
             db_connection.commit()
 
         except Exception as e:
-            messages.error(request, e)
+            msg = extract_string_before_word(str(e), "CONTEXT")
+            messages.error(request, msg)
             print('ERROR NIH')
-            db_connection.rollback()
+            db_connection.close()
+            return render(request, 'addpelatih.html', context)
 
     db_connection.close()
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
-
-def get_pemain(nama_tim, cursor):
-    query_get_pemain = """
-    SELECT Pm.ID_Pemain, CONCAT(Pm.Nama_Depan, ' ', Pm.Nama_Belakang) as Nama_Pemain, Nomor_HP, Tgl_Lahir, Is_Captain, Posisi, NPM, Jenjang 
-    FROM PEMAIN Pm WHERE Pm.Nama_Tim = %s
-    """
-    pemain_list = cursor.execute(query_get_pemain, (nama_tim,))
-    pemain_list = cursor.fetchall()
-    # print(pemain_list)
-    return pemain_list
-
-def get_pelatih(nama_tim, cursor):
-    query_get_pelatih = """
-    SELECT Pl.ID_Pelatih, CONCAT(Nama_Depan, ' ', Nama_Belakang) as Nama_Pelatih, Nomor_HP, Email, Alamat, Spesialisasi 
-    FROM Non_Pemain Np, Pelatih Pl, Spesialisasi_Pelatih Sp 
-    WHERE Np.ID = Pl.ID_Pelatih
-    and Pl.ID_Pelatih = Sp.ID_Pelatih
-    and Pl.Nama_Tim = %s
-    """
-    pelatih_list = cursor.execute(query_get_pelatih, (nama_tim,))
-    pelatih_list = cursor.fetchall()
-    return pelatih_list
 
 def make_captain(request):
     context = {}
@@ -254,3 +235,12 @@ def delete_pelatih(request):
     db_connection.commit()
     db_connection.close()
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
+
+def extract_string_before_word(string, word):
+    split_string = string.split(word)
+    if len(split_string) > 1:
+        # If the word is found in the string
+        return split_string[0]
+    else:
+        # If the word is not found in the string
+        return string
