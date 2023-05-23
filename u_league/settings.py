@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'manage_pertandingan',
     'crud_pertandingan',
     'mulai_rapat',
-    'mulai_pertandingan',
     'pembelian_tiket',
     'cru_peminjamanstadium',
     'r_listpertandingan',

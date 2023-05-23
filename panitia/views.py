@@ -15,3 +15,21 @@ def show_liststadium(request):
 
 def show_buatpertandingan(request):
     return render(request, "buatpertandingan.html")
+
+def mulai_pertandingan(request):
+    return render(request, "mulaipertandingan.html")
+
+def pilih_peristiwa(request):
+    return render(request, "pilihperistiwa.html")
+
+def show_incomplete(request):
+    return render(request, "incomplete.html")
+
+def show_listperistiwa(request):
+    return render(request, "listperistiwa.html")
+
+def show_tablelist(request):
+    return render(request, "tablelist.html")
+
+def show_finished(request):
+    return render(request, "finished.html")
