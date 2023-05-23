@@ -98,7 +98,7 @@
                     <p style="text-align: center; margin-bottom: 3px;">
 
                         <input class="hidden"  
-                          value="{{pemain.0}}" type="text" name="capt"></input>
+                          value="{{pemain.id_pemain}}" type="text" name="capt"></input>
 
                         <button type="submit"  class="action hover:underline" 
                         style="background: #1f40cb"> Make Captain </button>
@@ -149,7 +149,7 @@
                 <td>{{pelatih.nomor_hp}}</td>
                 <td>{{pelatih.email}}</td>
                 <td>{{pelatih.alamat}}</td>
-                <td>{{pelatih.spesialisasi}}</td>
+                <td>{{pelatih.jenis_spesialisasi}}</td>
                 <td>
                   <form METHOD="POST" action="{% url 'manager:delete_pelatih' %}"> 
                     {% csrf_token %}
