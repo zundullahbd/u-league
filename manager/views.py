@@ -4,6 +4,8 @@ import psycopg2
 import locale
 import uuid
 from utils.query import *
+from django.views.decorators.csrf import csrf_exempt
+
 locale.setlocale(locale.LC_ALL, '')
 from django.views.decorators.csrf import csrf_exempt
 
@@ -11,9 +13,20 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+@csrf_exempt
 def manager_home(request):
-    return render(request, 'manager_home.html')
+    context = {}
+    username = "amartusewicz2"
+    manajer = query(f"""
+                SELECT np.nama_depan, np.nama_belakang, np.nomor_hp, np.email, np.alamat, nps.status, tm.nama_tim
+                FROM manajer m, non_pemain np, status_non_pemain nps, tim_manajer tm
+                WHERE m.id_manajer = np.id AND np.id = nps.id_non_pemain AND m.id_manajer = tm.id_manajer AND m.username = '{username}'""")
+    context = {
+        'data_manajer' : manajer
+    }
+    return render(request, "manager_home.html", context=context)
 
+@csrf_exempt
 def mengelola_tim(request):
     username = "amartusewicz2"
 
@@ -64,6 +77,7 @@ def show_timregist(request):
     
     return render(request, "teamregist.html")
 
+@csrf_exempt
 def show_teamdetail(request):
     context = {}
 
@@ -94,6 +108,7 @@ def show_teamdetail(request):
 
     return render(request, "teamdetail.html", context=context)
 
+@csrf_exempt
 def show_addpemain(request):
     context = {}
     
@@ -110,7 +125,7 @@ def show_addpemain(request):
 
     return render(request, "addpemain.html", context=context)
 
-
+@csrf_exempt
 def show_addpelatih(request):
     context = {}
 
@@ -188,7 +203,7 @@ def make_captain(request):
 
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
-
+@csrf_exempt
 def delete_pemain(request):
     context = {}
 
@@ -202,6 +217,7 @@ def delete_pemain(request):
 
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def delete_pelatih(request):
     context = {}
 
@@ -218,6 +234,7 @@ def delete_pelatih(request):
 
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def get_team(username):
     id_manager = query(f"""
     SELECT id_manajer 
@@ -234,6 +251,7 @@ def get_team(username):
 
     return the_team[0]['nama_tim']
 
+@csrf_exempt
 def extract_string_before_word(string, word):
     split_string = string.split(word)
     if len(split_string) > 1:
