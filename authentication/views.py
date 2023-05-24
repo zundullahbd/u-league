@@ -13,6 +13,7 @@ import psycopg2
 def homepage(request):
     return render(request, "welcome_page.html")
 
+@csrf_exempt
 def login(request):
     if request.method == 'POST':
         username = request.POST['username']
