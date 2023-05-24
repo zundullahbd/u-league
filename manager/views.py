@@ -16,7 +16,7 @@ from django.urls import reverse
 @csrf_exempt
 def manager_home(request):
     context = {}
-    username = "amartusewicz2"
+    username = request.session['username']
     manajer = query(f"""
                 SELECT np.nama_depan, np.nama_belakang, np.nomor_hp, np.email, np.alamat, nps.status, tm.nama_tim
                 FROM manajer m, non_pemain np, status_non_pemain nps, tim_manajer tm
@@ -28,7 +28,7 @@ def manager_home(request):
 
 @csrf_exempt
 def mengelola_tim(request):
-    username = "amartusewicz2"
+    username = request.session['username']
 
     team = query(f"""
     SELECT * FROM Manajer
@@ -49,7 +49,8 @@ def mengelola_tim(request):
 
 @csrf_exempt
 def show_timregist(request):
-    username = "amartusewicz2"
+    username = request.session['username']
+
     if request.method == 'POST':
         team_name = request.POST.get("team_name")
         uni_name = request.POST.get("uni_name")
@@ -81,7 +82,7 @@ def show_timregist(request):
 def show_teamdetail(request):
     context = {}
 
-    username = "amartusewicz2"
+    username = request.session['username']
 
     nama_tim = get_team(username)
 
@@ -103,7 +104,8 @@ def show_teamdetail(request):
     print("halo")
     context = {
         'pemain_list' : query_get_pemain,
-        'pelatih_list' : query_get_pelatih
+        'pelatih_list' : query_get_pelatih,
+        'nama_tim' : nama_tim
     }
 
     return render(request, "teamdetail.html", context=context)
@@ -148,7 +150,7 @@ def show_addpelatih(request):
 @csrf_exempt
 def add_player(request):
     context = {}
-    username = "amartusewicz2"
+    username = request.session['username']
     nama_tim = get_team(username)
 
     if request.method == 'POST':
@@ -163,7 +165,7 @@ def add_player(request):
 @csrf_exempt
 def add_coach(request):
     context = {}
-    username = "amartusewicz2"
+    username = request.session['username']
     nama_tim = get_team(username)
 
     if request.method == 'POST':
@@ -186,7 +188,7 @@ def add_coach(request):
 def make_captain(request):
     context = {}
 
-    username = "amartusewicz2"
+    username = request.session['username']
     nama_tim = get_team(username)
 
     if request.method == 'POST':
