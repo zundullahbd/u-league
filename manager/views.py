@@ -12,8 +12,18 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+@csrf_exempt
 def manager_home(request):
-    return render(request, 'manager_home.html')
+    context = {}
+    username = "amartusewicz2"
+    manajer = query(f"""
+                SELECT np.nama_depan, np.nama_belakang, np.nomor_hp, np.email, np.alamat, nps.status, tm.nama_tim
+                FROM manajer m, non_pemain np, status_non_pemain nps, tim_manajer tm
+                WHERE m.id_manajer = np.id AND np.id = nps.id_non_pemain AND m.id_manajer = tm.id_manajer AND m.username = '{username}'""")
+    context = {
+        'data_manajer' : manajer
+    }
+    return render(request, "manager_home.html", context=context)
 
 @csrf_exempt
 def mengelola_tim(request):
