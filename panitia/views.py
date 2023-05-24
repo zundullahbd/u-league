@@ -15,3 +15,11 @@ def show_liststadium(request):
 
 def show_buatpertandingan(request):
     return render(request, "buatpertandingan.html")
+
+# untuk rapat
+def show_pertandingan(request):
+    return render(request, "pilihpertandingan.html")
+
+# untuk rapat
+def show_rapat(request):
+    return render(request, "rapat.html")

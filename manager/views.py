@@ -244,3 +244,15 @@ def extract_string_before_word(string, word):
     else:
         # If the word is not found in the string
         return string
+
+# untuk CRU peminjaman Stadium
+def show_listpemesanan(request):
+    return render(request, "listpemesan.html")
+
+def show_ketersediaanstadium(request):
+    return render(request, "ketersediaanstadium.html")
+
+def show_memesanstadium(request):
+    return render(request, "memesanstadium.html")
+
+
