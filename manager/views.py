@@ -23,13 +23,16 @@ def manager_home(request):
     #             WHERE m.id_manajer = np.id AND np.id = nps.id_non_pemain AND m.id_manajer = tm.id_manajer AND m.username = '{username}'""")
     
     manajer = query(f"""
-                SELECT np.nama_depan, np.nama_belakang, np.nomor_hp, np.email, np.alamat, string_agg(nps.status, ', ') as status, tm.nama_tim
+                SELECT np.nama_depan, np.nama_belakang, np.nomor_hp, np.email, np.alamat, string_agg(DISTINCT nps.status, ', ') as status, tm.nama_tim, t.universitas, COUNT(DISTINCT p.id_pemain) AS jumlah_pemain, COUNT(DISTINCT pl.id_pelatih) AS jumlah_pelatih
                 FROM manajer m
                 JOIN non_pemain np ON m.id_manajer = np.id
-                JOIN status_non_pemain nps ON np.id = nps.id_non_pemain
+                LEFT JOIN status_non_pemain nps ON np.id = nps.id_non_pemain
                 LEFT JOIN tim_manajer tm ON m.id_manajer = tm.id_manajer
+                LEFT JOIN tim t ON tm.nama_tim = t.nama_tim
+                LEFT JOIN pemain p ON t.nama_tim = p.nama_tim
+                LEFT JOIN pelatih pl ON t.nama_tim = pl.nama_tim
                 WHERE m.username = '{username}'
-                GROUP BY 1, 2, 3, 4, 5, 7""")
+                GROUP BY 1, 2, 3, 4, 5, 7, 8""")
 
     context = {
         'data_manajer' : manajer
