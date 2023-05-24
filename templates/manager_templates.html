@@ -60,7 +60,7 @@
         <nav class="navbar" style="background-color:black">
           {% for manager in data_manajer %}
           <p class="font-weight-bold" style="color: white; padding-left: 10px;">{{manager.nama_depan| upper}} {{manager.nama_belakang|upper}} - MANAGER</p>
-          {% endfor %}
+          
 
 
               <ul class="menu menu-horizontal p-0" style="size: 10px; float: right;">
@@ -87,7 +87,7 @@
               </li>
               </ul>
             <a href="{% url 'authentication:logout' %}" class="btn btn-sm font-weight-bold" style="background-color:#1f40cb; color: white;" >Logout</a>
-            
+            {% endfor %}
           </nav>
   
       {% block content %}
