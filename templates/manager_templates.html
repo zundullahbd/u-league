@@ -85,9 +85,9 @@
                     History Rapat
                   </a>
               </li>
+              {% endfor %}
               </ul>
             <a href="{% url 'authentication:logout' %}" class="btn btn-sm font-weight-bold" style="background-color:#1f40cb; color: white;" >Logout</a>
-            {% endfor %}
           </nav>
   
       {% block content %}
