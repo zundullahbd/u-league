@@ -17,10 +17,20 @@ from django.urls import reverse
 def manager_home(request):
     context = {}
     username = request.session['username']
+    # manajer = query(f"""
+    #             SELECT np.nama_depan, np.nama_belakang, np.nomor_hp, np.email, np.alamat, nps.status, tm.nama_tim
+    #             FROM manajer m, non_pemain np, status_non_pemain nps, tim_manajer tm
+    #             WHERE m.id_manajer = np.id AND np.id = nps.id_non_pemain AND m.id_manajer = tm.id_manajer AND m.username = '{username}'""")
+    
     manajer = query(f"""
-                SELECT np.nama_depan, np.nama_belakang, np.nomor_hp, np.email, np.alamat, nps.status, tm.nama_tim
-                FROM manajer m, non_pemain np, status_non_pemain nps, tim_manajer tm
-                WHERE m.id_manajer = np.id AND np.id = nps.id_non_pemain AND m.id_manajer = tm.id_manajer AND m.username = '{username}'""")
+                SELECT np.nama_depan, np.nama_belakang, np.nomor_hp, np.email, np.alamat, string_agg(nps.status, ', ') as status, tm.nama_tim
+                FROM manajer m
+                JOIN non_pemain np ON m.id_manajer = np.id
+                JOIN status_non_pemain nps ON np.id = nps.id_non_pemain
+                LEFT JOIN tim_manajer tm ON m.id_manajer = tm.id_manajer
+                WHERE m.username = '{username}'
+                GROUP BY 1, 2, 3, 4, 5, 7""")
+
     context = {
         'data_manajer' : manajer
     }
@@ -50,6 +60,17 @@ def mengelola_tim(request):
 @csrf_exempt
 def show_timregist(request):
     username = request.session['username']
+
+    team = query(f"""
+    SELECT * FROM Manajer
+    NATURAL LEFT JOIN Tim_Manajer
+    WHERE Username = '{username}'
+    """)
+
+    if team[0]['nama_tim'] is not None:
+        print("MASUK SINI JUGA PLS")
+        print(team[0]['nama_tim'])
+        return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
     if request.method == 'POST':
         team_name = request.POST.get("team_name")
