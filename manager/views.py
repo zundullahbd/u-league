@@ -5,6 +5,7 @@ import locale
 import uuid
 from utils.query import *
 locale.setlocale(locale.LC_ALL, '')
+from django.views.decorators.csrf import csrf_exempt
 
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -33,6 +34,7 @@ def mengelola_tim(request):
     
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def show_timregist(request):
     username = "amartusewicz2"
     if request.method == 'POST':
@@ -128,6 +130,7 @@ def show_addpelatih(request):
     
     return render(request, "addpelatih.html", context=context)
 
+@csrf_exempt
 def add_player(request):
     context = {}
     username = "amartusewicz2"
@@ -142,6 +145,7 @@ def add_player(request):
 
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def add_coach(request):
     context = {}
     username = "amartusewicz2"
@@ -163,6 +167,7 @@ def add_coach(request):
 
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def make_captain(request):
     context = {}
 
