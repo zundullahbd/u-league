@@ -11,5 +11,11 @@ urlpatterns = [
         path('stadium/', views.show_liststadium, name='show_liststadium'),
         path('buat/', views.show_buatpertandingan, name='show_buatpertandingan'),
         path('pertandingan/', show_pertandingan, name='show_pertandingan'),
-        path('rapat/', show_rapat, name='show_rapat'),
+        path('rapat/<str:id_pertandingan>/', show_rapat, name='show_rapat'),
+        path('mulai_pertandingan/', views.mulai_pertandingan, name='mulai_pertandingan'),
+        path('mulai_pertandingan/pilih_peristiwa/', views.pilih_peristiwa, name='pilih_peristiwa'),
+        path('incomplete/', show_incomplete, name='show_incomplete'),
+        path('tablelist/', show_tablelist, name='show_tablelist'),
+        path('listperistiwa/', show_listperistiwa, name='show_listperistiwa'),
+        path('finished/', show_finished, name='show_finished'),
 ]

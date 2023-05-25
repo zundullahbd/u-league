@@ -4,6 +4,8 @@ import psycopg2
 import locale
 import uuid
 from utils.query import *
+from django.views.decorators.csrf import csrf_exempt
+
 locale.setlocale(locale.LC_ALL, '')
 
 from django.http import HttpResponse
@@ -13,13 +15,64 @@ from django.urls import reverse
 def manager_home(request):
     return render(request, 'manager_home.html')
 
+@csrf_exempt
+def mengelola_tim(request):
+    username = "amartusewicz2"
+
+    team = query(f"""
+    SELECT * FROM Manajer
+    NATURAL LEFT JOIN Tim_Manajer
+    WHERE Username = '{username}'
+    """)
+
+    print("HEY COBA DULU")
+    print(team)
+    print(team[0]['nama_tim'])
+
+    if team[0]['nama_tim'] is None:
+        print("MASUK SINI JUGA PLS")
+        print(team[0]['nama_tim'])
+        return HttpResponseRedirect(reverse('manager:show_timregist'))
+    
+    return HttpResponseRedirect(reverse('manager:show_teamdetail'))
+
+@csrf_exempt
 def show_timregist(request):
+    username = "amartusewicz2"
+    if request.method == 'POST':
+        team_name = request.POST.get("team_name")
+        uni_name = request.POST.get("uni_name")
+    
+        query_add = query(f"""
+        INSERT INTO TIM values ('{team_name}', '{uni_name}')""")
+        
+        print("\nINI HASILNYA WOI")
+        print(query_add)
+        print(type(query_add))
+
+        if isinstance(query_add, psycopg2.errors.UniqueViolation):
+            # msg = extract_string_before_word(str(query_add), "DETAIL")
+            messages.error(request, "Nama tim tidak tersedia")
+            print('ERROR NIH')
+            return render(request, "teamregist.html")
+        
+        get_id_manajer = query(f"""
+            SELECT ID_Manajer FROM MANAJER 
+            WHERE Username = '{username}'""")[0]['id_manajer']
+        
+        query(f"""INSERT INTO Tim_Manajer values ('{get_id_manajer}', '{team_name}')""")
+
+        return HttpResponseRedirect(reverse('manager:show_teamdetail'))
+    
     return render(request, "teamregist.html")
 
+@csrf_exempt
 def show_teamdetail(request):
     context = {}
-    
-    nama_tim = "Manchester United"
+
+    username = "amartusewicz2"
+
+    nama_tim = get_team(username)
 
     query_get_pemain = query(f"""
     SELECT Pm.ID_Pemain, CONCAT(Pm.Nama_Depan, ' ', Pm.Nama_Belakang) as Nama_Pemain, Nomor_HP, Tgl_Lahir, Is_Captain, Posisi, NPM, Jenjang 
@@ -27,11 +80,13 @@ def show_teamdetail(request):
     """)
 
     query_get_pelatih = query(f"""
-    SELECT Pl.ID_Pelatih, CONCAT(Nama_Depan, ' ', Nama_Belakang) as Nama_Pelatih, Nomor_HP, Email, Alamat, Spesialisasi 
+    SELECT Pl.ID_Pelatih, CONCAT(Nama_Depan, ' ', Nama_Belakang) as Nama_Pelatih, 
+        Nomor_HP, Email, Alamat, string_agg(Spesialisasi, ', ') as Jenis_Spesialisasi
     FROM Non_Pemain Np, Pelatih Pl, Spesialisasi_Pelatih Sp 
     WHERE Np.ID = Pl.ID_Pelatih
     and Pl.ID_Pelatih = Sp.ID_Pelatih
     and Pl.Nama_Tim = '{nama_tim}'
+    group by 1, 2, 3, 4, 5
     """)
 
     print("halo")
@@ -42,34 +97,24 @@ def show_teamdetail(request):
 
     return render(request, "teamdetail.html", context=context)
 
+@csrf_exempt
 def show_addpemain(request):
     context = {}
-    db_connection = psycopg2.connect(
-        host="localhost",
-        database="fauziah.putri11",
-        port="5433",
-        user="postgres",
-        password="putisql123"
-    )
-    cursor = db_connection.cursor()
     
-    cursor.execute("set search_path to uleague")
-    pemain_tersedia_list = cursor.execute("""
+    pemain_tersedia_list = query(f"""
         SELECT ID_Pemain, CONCAT(Nama_Depan, ' ', Nama_Belakang) as Nama_Pemain, Posisi
         FROM Pemain
         WHERE Nama_Tim is NULL
         ORDER BY Nama_Pemain ASC;
         """)
-    pemain_tersedia_list = cursor.fetchall()
 
     context = {
         'pemain_tersedia_list' : pemain_tersedia_list
         }
-    print(context)
-    db_connection.close()
+
     return render(request, "addpemain.html", context=context)
 
-
+@csrf_exempt
 def show_addpelatih(request):
     context = {}
 
@@ -87,155 +132,115 @@ def show_addpelatih(request):
         'pelatih_tersedia_list' : pelatih_tersedia_list
         }
     
-    print(pelatih_tersedia_list)
-    
     return render(request, "addpelatih.html", context=context)
 
+@csrf_exempt
 def add_player(request):
     context = {}
-    db_connection = psycopg2.connect(
-        host="localhost",
-        database="fauziah.putri11",
-        port="5433",
-        user="postgres",
-        password="putisql123"
-    )
-    cursor = db_connection.cursor()
+    username = "amartusewicz2"
+    nama_tim = get_team(username)
+
     if request.method == 'POST':
         id_player = request.POST.get("player")    
-        cursor.execute("set search_path to uleague")
-        query_add = "UPDATE PEMAIN SET Nama_Tim = %s WHERE ID_Pemain = %s"
+        testtt = query(f"UPDATE PEMAIN SET Nama_Tim = '{nama_tim}' WHERE ID_Pemain = '{id_player}'")
 
-        try:
-            cursor.execute(query_add, ("Manchester United", id_player))
-            print(cursor)
-            db_connection.commit()
+        print(id_player)
+        print(testtt)
 
-        except Exception as e:
-            messages.error(request, e)
-            print('ERROR NIH')
-            db_connection.rollback()
-            db_connection.close()
-            return render(request, 'addpelatih.html', context)
-
-    db_connection.close()
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def add_coach(request):
     context = {}
-    db_connection = psycopg2.connect(
-        host="localhost",
-        database="fauziah.putri11",
-        port="5433",
-        user="postgres",
-        password="putisql123"
-    )
-    cursor = db_connection.cursor()
+    username = "amartusewicz2"
+    nama_tim = get_team(username)
+
     if request.method == 'POST':
         id_coach = request.POST.get("coach")    
-        cursor.execute("set search_path to uleague")
-        query_add = "UPDATE PELATIH SET Nama_Tim = %s WHERE ID_Pelatih = %s"
+        query_add = query(f"UPDATE PELATIH SET Nama_Tim = '{nama_tim}' WHERE ID_Pelatih = '{id_coach}'")
+        
+        print("\nINI HASILNYA YAA")
+        print(query_add)
+        print(type(query_add))
 
-        try:
-            cursor.execute(query_add, ("Manchester United", id_coach))
-            print(cursor)
-            db_connection.commit()
-
-        except Exception as e:
-            msg = extract_string_before_word(str(e), "CONTEXT")
+        if isinstance(query_add, psycopg2.errors.RaiseException):
+            msg = extract_string_before_word(str(query_add), "CONTEXT")
             messages.error(request, msg)
             print('ERROR NIH')
-            db_connection.close()
             return render(request, 'addpelatih.html', context)
 
-    db_connection.close()
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def make_captain(request):
     context = {}
-    db_connection = psycopg2.connect(
-        host="localhost",
-        database="fauziah.putri11",
-        port="5433",
-        user="postgres",
-        password="putisql123"
-    )
-    cursor = db_connection.cursor()
 
-    query_update_captain = """
-    UPDATE PEMAIN
-            SET Is_Captain = 'TRUE'
-            WHERE Nama_Tim = %s
-            and ID_Pemain = %s
-    """
+    username = "amartusewicz2"
+    nama_tim = get_team(username)
 
     if request.method == 'POST':
-        id_new_captain = request.POST.get("capt")    
-        cursor.execute("set search_path to uleague")
-        cursor.execute(query_update_captain, ("Manchester United", id_new_captain))
-        print(cursor)
-    db_connection.commit()
-    db_connection.close()
+        id_new_captain = request.POST.get("capt") 
+        print(request.POST)
+        print("DISINI")
+        print(id_new_captain)   
+        query(f"""
+        UPDATE PEMAIN
+            SET Is_Captain = 'TRUE'
+            WHERE Nama_Tim = '{nama_tim}'
+            and ID_Pemain = '{id_new_captain}'
+        """)
+
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
-
+@csrf_exempt
 def delete_pemain(request):
     context = {}
-    db_connection = psycopg2.connect(
-        host="localhost",
-        database="fauziah.putri11",
-        port="5433",
-        user="postgres",
-        password="putisql123"
-    )
-    cursor = db_connection.cursor()
-    
-    query_delete_player = """
-    UPDATE PEMAIN
-        SET Nama_Tim = NULL
-        WHERE ID_Pemain = %s
-    """
 
     if request.method == 'POST':
         id_player = request.POST.get("player")    
-        cursor.execute("set search_path to uleague")
-        cursor.execute(query_delete_player, (id_player,))
-        print(cursor)
+        query(f"""
+        UPDATE PEMAIN
+            SET Nama_Tim = NULL
+            WHERE ID_Pemain = '{id_player}'
+        """)
 
-    db_connection.commit()
-    db_connection.close()
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
 def delete_pelatih(request):
     context = {}
-    db_connection = psycopg2.connect(
-        host="localhost",
-        database="fauziah.putri11",
-        port="5433",
-        user="postgres",
-        password="putisql123"
-    )
-    cursor = db_connection.cursor()
-    
-    query_delete_coach = """
-    UPDATE PELATIH
-        SET Nama_Tim = NULL
-        WHERE ID_Pelatih = %s
-    """
 
     if request.method == 'POST':
         id_coach = request.POST.get("coach")
-        # print(request.POST) 
-        print(id_coach)    
 
-        cursor.execute("set search_path to uleague")
-        cursor.execute(query_delete_coach, (id_coach,))
+        query(f"""
+            UPDATE PELATIH
+                SET Nama_Tim = NULL
+                WHERE ID_Pelatih = '{id_coach}'
+            """)    
+
         print(cursor)
 
-    db_connection.commit()
-    db_connection.close()
     return HttpResponseRedirect(reverse('manager:show_teamdetail'))
 
+@csrf_exempt
+def get_team(username):
+    id_manager = query(f"""
+    SELECT id_manajer 
+    FROM MANAJER 
+    WHERE username='{username}'""")[0]['id_manajer']
+
+    query_get_team = f"""
+    SELECT Nama_Tim
+        FROM Tim_Manajer
+        WHERE ID_Manajer = '{id_manager}'
+    """
+
+    the_team = query(query_get_team)
+
+    return the_team[0]['nama_tim']
+
+@csrf_exempt
 def extract_string_before_word(string, word):
     split_string = string.split(word)
     if len(split_string) > 1:
@@ -247,10 +252,42 @@ def extract_string_before_word(string, word):
 
 # untuk CRU peminjaman Stadium
 def show_listpemesanan(request):
-    return render(request, "listpemesan.html")
+    if request.method == 'GET':
+
+            pemesanan = query("""SELECT nama, start_datetime || ' - ' || end_datetime as waktu FROM stadium s, peminjaman p, manajer m where s.id_stadium = p.id_stadium AND m.id_manajer = p.id_manajer ORDER BY start_datetime asc;""")
+                
+            print(pemesanan)
+            context = {'pemesanan': pemesanan}
+
+            return render(request, 'listpemesan.html', context)
 
 def show_ketersediaanstadium(request):
-    return render(request, "ketersediaanstadium.html")
+    context = {}
+    
+    stadium = query("""
+        SELECT id_stadium, nama
+        FROM stadium 
+        ;
+        """)
+
+    context = {
+        'stadium' : stadium
+        }
+    return render(request, "ketersediaanstadium.html", context)
+
+# def add_pesanstadium(request):
+#     context = {}
+#     # username = "amartusewicz2"
+#     # nama_tim = get_team(username)
+
+#     if request.method == 'POST':
+#         id_stadium = request.POST.get("stadium")    
+#         testtt = query(f"UPDATE PEMAIN SET Nama_Tim = '{nama_tim}' WHERE ID_Pemain = '{id_player}'")
+
+#         print(id_stadium)
+#         print(testtt)
+
+#     return HttpResponseRedirect(reverse('manager:show_ketersediaan'))
 
 def show_memesanstadium(request):
     return render(request, "memesanstadium.html")

@@ -48,7 +48,7 @@
               style="padding-top: 1rem; padding-bottom: 0rem;font-size:13px; height: 3.5rem; line-height: 1.5;">
               <option disabled selected>--- Pilih Pemain ---</option>
               {% for pemain in pemain_tersedia_list %}
-              <option value={{pemain.0}}> {{pemain.1}} - {{pemain.2}} </option>
+              <option value={{pemain.id_pemain}}> {{pemain.nama_pemain}} - {{pemain.posisi}} </option>
               {% endfor %}
             </select>
           </div>
