@@ -92,16 +92,55 @@
                             <td>{{win.pemenang}}</td>
                             <td>
                                 <p style="text-align: center">
-                                    <a class="btn text-light p-1" role="button"
+                                    <a href="{% url 'panitia:show_listperistiwa' nama_tim=tim1_query.nama_tim %}" class="btn text-light p-1" role="button"
                                       style="font-size: 14px; border-radius: 14px; background: #1f40cb">
-                                      Lihat Peristiwa Tim 1</a>
-                                </p>
-                                <p style="text-align: center">
-                                    <a class="btn text-light p-1" role="button"
+                                      Lihat Peristiwa Tim 1
+                                    </a>
+                                  </p>
+                                  <p style="text-align: center">
+                                    <a href="{% url 'panitia:show_listperistiwa' nama_tim=tim2_query.nama_tim %}" class="btn text-light p-1" role="button"
                                       style="font-size: 14px; border-radius: 14px; background: #00a2ed">
-                                      Lihat Peristiwa Tim 2</a>
+                                      Lihat Peristiwa Tim 2
+                                    </a>
+                                  </p>
+                                  
                                 </p>
                             </td>
+                        </tr>
+                        <tr>
+                            <td>E VS F</td>
+                            <td>[Waktu Dimulai -5 menit]</td>
+                            <td>-</td>
+                            <td>
+                                <p style="text-align: center">
+                                    <a href="{% url 'panitia:mulai_pertandingan' %}" class="btn text-light p-1" role="button"
+                                      style="font-size: 14px; border-radius: 14px; background: #051c2c">
+                                      Mulai</a>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>G VS H</td>
+                            <td>10 May 2023, 12:00</td>
+                            <td>-</td>
+                            <td>
+                                <p style="text-align: center">
+                                    Belum waktunya
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">…</td>
+                            <td>…</td>
+                            <td>…</td>
+                            <td>…</td>
+                            <td>…</td>
+                        </tr>
+                        <tr>
+                            <td>…</td>
+                            <td>…</td>
+                            <td>…</td>
+                            <td>…</td>
                         </tr> 
                         {% endfor %} {% endfor %} {% endfor %} {% endfor %}
                     </table>

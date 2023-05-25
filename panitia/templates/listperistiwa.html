@@ -8,12 +8,16 @@
 </head>
 
 <body>
-    <div class="a" style="background: #051c2c">
-        <h1 class="a"> Kelola Pertandingan </h1>
+    <div class="p-5 mb-1 text-light w-full" style="background: #051c2c">
+        <h1 class="fw text-light text-4xl text-center"> Kelola Pertandingan </h1>
     </div> 
 
+    {% if nama_pemainA %}
     <div class="p-3 mt-3 ml-2 mb-0 text-dark" style="text-align: center">
-        <h4 class="fw"> Peristiwa Tim A </h3>
+        {% for nama in nama_pemainA %}
+        <h4 class="fw"> Peristiwa Tim {{nama.nama_tim}} </h3>
+        {% endfor %}
+        
     </div> 
 
     <div class="px-5 mt-0 mb-2 mx-5 text-dark" style="font-size: 15px">
@@ -24,34 +28,47 @@
                 <th scope="col">Peristiwa</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="text-light">
+              {% for A in nama_pemainA %}
+              {% for APeristiwa in peristiwaA %}
               <tr>
-                <td>...</td>
-                <td>...</td>
+                <td>{{A.nama_depan}} {{A.nama_belakang}}</td>
+                <td>{{APeristiwa.jenis}}</td>
               </tr>
-              <tr>
-                <td>...</td>
-                <td>...</td>
-              </tr>
-              <tr>
-                <td>...</td>
-                <td>...</td>
-              </tr>
-              <tr>
-                <td>...</td>
-                <td>...</td>
-              </tr>
-              <tr>
-                <td>...</td>
-                <td>...</td>
-              </tr>
-              <tr>
-                <td>...</td>
-                <td>...</td>
-              </tr>
+              {% endfor %}
+              {% endfor %}
             </tbody>
           </table>
     </div>
+    {% else %}
+    <div class="p-3 mt-3 ml-2 mb-0 text-dark" style="text-align: center">
+        {% for namaB in nama_pemainB %}
+        <h4 class="fw"> Peristiwa Tim {{namaB.nama_tim}} </h3>
+        {% endfor %}
+        
+    </div> 
+
+    <div class="px-5 mt-0 mb-2 mx-5 text-dark" style="font-size: 15px">
+        <table class="table table-striped table-bordered" >
+            <thead class="thead-dark text-light" style="background: #051c2c">
+              <tr>
+                <th scope="col">Nama Pemain</th>
+                <th scope="col">Peristiwa</th>
+              </tr>
+            </thead>
+            <tbody class="text-light">
+              {% for B in nama_pemainB %}
+              {% for PeristiwaB in peristiwaB %}
+              <tr>
+                <td>{{B.nama_depan}} {{B.nama_belakang}}</td>
+                <td>{{PeristiwaB.jenis}}</td>
+              </tr>
+              {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
+    {% endif %}
     
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"

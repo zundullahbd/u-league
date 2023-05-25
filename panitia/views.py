@@ -67,7 +67,56 @@ def show_incomplete(request):
     return render(request, "incomplete.html")
 
 def show_listperistiwa(request):
-    return render(request, "listperistiwa.html")
+    context = {}
+    
+    username = request.session['username']
+    
+    nama_pemain_A = query(f"""
+                        SELECT distinct pm.nama_depan, pm.nama_belakang, t.nama_tim
+                        FROM pemain pm, peristiwa pr, pertandingan p, tim_pertandingan tp, tim t, rapat r, panitia pa, tim_manajer tm
+                        WHERE pr.id_pemain = pm.id_pemain AND pr.id_pertandingan = p.id_pertandingan
+                        AND p.id_pertandingan = tp.id_pertandingan AND tp.nama_tim = t.nama_tim
+                        AND tm.nama_tim = t.nama_tim AND tm.id_manajer = r.manajer_tim_a
+                        AND r.perwakilan_panitia = pa.id_panitia AND pa.username = '{username}'
+                        GROUP BY 1, 2, 3""")
+    
+    peristiwa_A = query(f"""
+                        SELECT distinct pr.jenis
+                        FROM pemain pm, peristiwa pr, pertandingan p, tim_pertandingan tp, tim t, rapat r, panitia pa, tim_manajer tm
+                        WHERE pr.id_pemain = pm.id_pemain AND pr.id_pertandingan = p.id_pertandingan
+                        AND p.id_pertandingan = tp.id_pertandingan AND tp.nama_tim = t.nama_tim
+                        AND tm.nama_tim = t.nama_tim AND tm.id_manajer = r.manajer_tim_a
+                        AND r.perwakilan_panitia = pa.id_panitia AND pa.username = '{username}'
+                        GROUP BY 1""")
+    
+    nama_pemain_B = query(f"""
+                        SELECT distinct pm.nama_depan, pm.nama_belakang
+                        FROM pemain pm, peristiwa pr, pertandingan p, tim_pertandingan tp, tim t, rapat r, panitia pa, tim_manajer tm
+                        WHERE pr.id_pemain = pm.id_pemain AND pr.id_pertandingan = p.id_pertandingan
+                        AND p.id_pertandingan = tp.id_pertandingan AND tp.nama_tim = t.nama_tim
+                        AND tm.nama_tim = t.nama_tim AND tm.id_manajer = r.manajer_tim_b
+                        AND r.perwakilan_panitia = pa.id_panitia AND pa.username = '{username}'
+                        GROUP BY 1, 2""")
+    
+    peristiwa_B = query(f"""
+                        SELECT distinct pr.jenis
+                        FROM pemain pm, peristiwa pr, pertandingan p, tim_pertandingan tp, tim t, rapat r, panitia pa, tim_manajer tm
+                        WHERE pr.id_pemain = pm.id_pemain AND pr.id_pertandingan = p.id_pertandingan
+                        AND p.id_pertandingan = tp.id_pertandingan AND tp.nama_tim = t.nama_tim
+                        AND tm.nama_tim = t.nama_tim AND tm.id_manajer = r.manajer_tim_b
+                        AND r.perwakilan_panitia = pa.id_panitia AND pa.username = '{username}'
+                        GROUP BY 1, 2""")
+    
+    
+    context = {
+        'nama_pemainA' : nama_pemain_A,
+        'peristiwaA' : peristiwa_A,
+        'nama_pemainB' : nama_pemain_B,
+        'peristiwaB' : peristiwa_B
+        
+    }
+    
+    return render(request, "listperistiwa.html", context=context)
 
 @csrf_exempt
 def show_tablelist(request):
@@ -155,25 +204,27 @@ def show_pertandingan(request):
             return render(request, 'pilihpertandingan.html', context)
  
 @csrf_exempt
-def manage_pertandingan(request):
+def kelola_pertandingan(request):
     username = request.session['username']
     
     list_pertandingan = query(f"""
-                              SELECT * from pertandingan
-                              JOIN peristiwa ON pertandingan.id_pertandingan = peristiwa.id_pertandingan
-                              JOIN wasit_bertugas ON pertandingan.id_pertandingan = wasit_bertugas.id_pertandingan
-                              JOIN tim_pertandingan ON pertandingan.id_pertandingan = tim_pertandingan.id_pertandingan
-                              LEFT JOIN rapat ON pertandingan.id_pertandingan = rapat.id_pertandingan
-                              WHERE perwakilan_panitia = '{username}'
-                              GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9""")
+                              SELECT p.id_pertandingan, tp.nama_tim
+                                FROM pertandingan p
+                                JOIN tim_pertandingan tp ON p.id_pertandingan = tp.id_pertandingan
+                                JOIN tim t ON tp.nama_tim = t.nama_tim
+                                LEFT JOIN rapat r ON p.id_pertandingan = r.id_pertandingan
+                                LEFT JOIN panitia pa ON r.perwakilan_panitia = pa.id_panitia
+                                WHERE pa.username = '{username}'
+                                GROUP BY 1, 2""")
+                                
+    print("try")
+    print("list_pertandingan:", list_pertandingan)
+    print("length of list_pertandingan:", len(list_pertandingan))
     
-    print ("try")
-    print (list_pertandingan)
-    print (list_pertandingan[0]['id_pertandingan'])
-    
-    if list_pertandingan[0]['id_pertandingan'] == None:
-        print ("belum ada pertandingan")
-        print (list_pertandingan[0]['id_pertandingan'])
+    if len(list_pertandingan) == 0:
+        print("belum ada pertandingan")
         return HttpResponseRedirect(reverse('panitia:show_incomplete'))
     
+    print("nama_tim:", list_pertandingan[0]['nama_tim'])
     return HttpResponseRedirect(reverse('panitia:show_tablelist'))
+

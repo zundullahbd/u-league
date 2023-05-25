@@ -59,7 +59,7 @@
           {% if data_panitia %}
           {% for panitia in data_panitia %}
             <p class="font-weight-bold" style="color: white; padding-left: 10px;">
-              {{ panitia.nama_depan|upper }} {{ panitia.nama_belakang|upper }} - MANAGER
+              {{ panitia.nama_depan|upper }} {{ panitia.nama_belakang|upper }} - PANITIA
             </p>
           {% endfor %}
         {% else %}
@@ -73,7 +73,7 @@
                   </a>
                 </li>
                 <li tabindex="0">
-                  <a href="{% url 'panitia:show_tablelist' %}">
+                  <a href="{% url 'panitia:kelola_pertandingan' %}">
                     Manage Pertandingan 
                   </a>
               </li>
