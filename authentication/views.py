@@ -8,6 +8,9 @@ from utils.query import *
 from django.contrib import messages
 import uuid
 import psycopg2
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 def homepage(request):
@@ -139,7 +142,7 @@ def register_manager(request):
 
         print('INI DETAILNYA YA', non_pemain, '\n', insert_manajer, '\n')
 
-        return render(request, 'login.html')
+        return HttpResponseRedirect(reverse('authentication:login'))
 
     return render(request, 'managerlogin.html')
 
@@ -213,7 +216,7 @@ def register_panitia(request):
 
         print('INI DETAILNYA YA', non_pemain, '\n', insert_panitia, '\n')
 
-        return render(request, 'login.html')
+        return HttpResponseRedirect(reverse('authentication:login'))
     
     return render(request, 'panitialogin.html')
 
@@ -285,7 +288,8 @@ def register_penonton(request):
 
         print('INI DETAILNYA YA', non_pemain, '\n', insert_penonton, '\n')
 
-        return render(request, 'login.html')
+        return HttpResponseRedirect(reverse('authentication:login'))
+    
     return render(request, 'penontonlogin.html')
 
 def logout(request):
