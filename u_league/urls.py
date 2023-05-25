@@ -24,7 +24,6 @@ urlpatterns = [
     path('mulai-rapat/', include('mulai_rapat.urls')),
     path('pembelian/', include('pembelian_tiket.urls')),
     path('', include ('authentication.urls')),
-    path('manage_pertandingan/', include('manage_pertandingan.urls')),
     path('crud_pertandingan/', include('crud_pertandingan.urls')),
     path('cru_peminjamanstadium/', include('cru_peminjamanstadium.urls')),
     path('r_listpertandingan/', include('r_listpertandingan.urls')),

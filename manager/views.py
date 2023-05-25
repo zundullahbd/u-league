@@ -7,17 +7,41 @@ from utils.query import *
 from django.views.decorators.csrf import csrf_exempt
 
 locale.setlocale(locale.LC_ALL, '')
+from django.views.decorators.csrf import csrf_exempt
 
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+@csrf_exempt
 def manager_home(request):
-    return render(request, 'manager_home.html')
+    context = {}
+    username = request.session['username']
+    # manajer = query(f"""
+    #             SELECT np.nama_depan, np.nama_belakang, np.nomor_hp, np.email, np.alamat, nps.status, tm.nama_tim
+    #             FROM manajer m, non_pemain np, status_non_pemain nps, tim_manajer tm
+    #             WHERE m.id_manajer = np.id AND np.id = nps.id_non_pemain AND m.id_manajer = tm.id_manajer AND m.username = '{username}'""")
+    
+    manajer = query(f"""
+                SELECT np.nama_depan, np.nama_belakang, np.nomor_hp, np.email, np.alamat, string_agg(DISTINCT nps.status, ', ') as status, tm.nama_tim, t.universitas, COUNT(DISTINCT p.id_pemain) AS jumlah_pemain, COUNT(DISTINCT pl.id_pelatih) AS jumlah_pelatih
+                FROM manajer m
+                JOIN non_pemain np ON m.id_manajer = np.id
+                LEFT JOIN status_non_pemain nps ON np.id = nps.id_non_pemain
+                LEFT JOIN tim_manajer tm ON m.id_manajer = tm.id_manajer
+                LEFT JOIN tim t ON tm.nama_tim = t.nama_tim
+                LEFT JOIN pemain p ON t.nama_tim = p.nama_tim
+                LEFT JOIN pelatih pl ON t.nama_tim = pl.nama_tim
+                WHERE m.username = '{username}'
+                GROUP BY 1, 2, 3, 4, 5, 7, 8""")
+
+    context = {
+        'data_manajer' : manajer
+    }
+    return render(request, "manager_home.html", context=context)
 
 @csrf_exempt
 def mengelola_tim(request):
-    username = "amartusewicz2"
+    username = request.session['username']
 
     team = query(f"""
     SELECT * FROM Manajer
@@ -38,7 +62,19 @@ def mengelola_tim(request):
 
 @csrf_exempt
 def show_timregist(request):
-    username = "amartusewicz2"
+    username = request.session['username']
+
+    team = query(f"""
+    SELECT * FROM Manajer
+    NATURAL LEFT JOIN Tim_Manajer
+    WHERE Username = '{username}'
+    """)
+
+    if team[0]['nama_tim'] is not None:
+        print("MASUK SINI JUGA PLS")
+        print(team[0]['nama_tim'])
+        return HttpResponseRedirect(reverse('manager:show_teamdetail'))
+
     if request.method == 'POST':
         team_name = request.POST.get("team_name")
         uni_name = request.POST.get("uni_name")
@@ -70,7 +106,7 @@ def show_timregist(request):
 def show_teamdetail(request):
     context = {}
 
-    username = "amartusewicz2"
+    username = request.session['username']
 
     nama_tim = get_team(username)
 
@@ -92,7 +128,8 @@ def show_teamdetail(request):
     print("halo")
     context = {
         'pemain_list' : query_get_pemain,
-        'pelatih_list' : query_get_pelatih
+        'pelatih_list' : query_get_pelatih,
+        'nama_tim' : nama_tim
     }
 
     return render(request, "teamdetail.html", context=context)
@@ -137,7 +174,7 @@ def show_addpelatih(request):
 @csrf_exempt
 def add_player(request):
     context = {}
-    username = "amartusewicz2"
+    username = request.session['username']
     nama_tim = get_team(username)
 
     if request.method == 'POST':
@@ -152,7 +189,7 @@ def add_player(request):
 @csrf_exempt
 def add_coach(request):
     context = {}
-    username = "amartusewicz2"
+    username = request.session['username']
     nama_tim = get_team(username)
 
     if request.method == 'POST':
@@ -175,7 +212,7 @@ def add_coach(request):
 def make_captain(request):
     context = {}
 
-    username = "amartusewicz2"
+    username = request.session['username']
     nama_tim = get_team(username)
 
     if request.method == 'POST':
