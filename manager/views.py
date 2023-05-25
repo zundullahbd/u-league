@@ -110,6 +110,7 @@ def show_teamdetail(request):
 
     nama_tim = get_team(username)
 
+
     query_get_pemain = query(f"""
     SELECT Pm.ID_Pemain, CONCAT(Pm.Nama_Depan, ' ', Pm.Nama_Belakang) as Nama_Pemain, Nomor_HP, Tgl_Lahir, Is_Captain, Posisi, NPM, Jenjang 
     FROM PEMAIN Pm WHERE Pm.Nama_Tim = '{nama_tim}'

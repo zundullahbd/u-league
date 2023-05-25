@@ -18,7 +18,7 @@
         li{
           color: white;
         }
-        a2:hover{
+        a:hover{
           color: white;
           text-decoration:none;
           background-color: #1f40cb;
@@ -56,19 +56,24 @@
     </head>
     <body>
         <nav class="navbar" style="background-color:black">
-            {% for nama in data_panitia %}
-            <p class="font-weight-bold" style="color: white; padding-left: 10px;">{{nama.nama_depan|upper}} {{nama.nama_belakang|upper}} - PANITIA</p>
-            {% endfor %}
-
+          {% if data_panitia %}
+          {% for panitia in data_panitia %}
+            <p class="font-weight-bold" style="color: white; padding-left: 10px;">
+              {{ panitia.nama_depan|upper }} {{ panitia.nama_belakang|upper }} - MANAGER
+            </p>
+          {% endfor %}
+        {% else %}
+          <p class="font-weight-bold" style="color: white; padding-left: 10px;">Failed to fetch</p>
+        {% endif %}
               <ul class="menu menu-horizontal p-0" style="size: 10px; float: right;">
                 <li><a href="{% url 'panitia:panitia_home' %}">Dashboard</a></li>
                 <li tabindex="0">
                   <a href="{% url 'panitia:show_pertandingan' %}">Rapat</a> 
                 </li>
                 <li tabindex="0">
-                  <a2>
+                  <a href="{% url 'panitia:show_tablelist' %}">
                     Manage Pertandingan 
-                  </a2>
+                  </a>
               </li>
             </ul>
 

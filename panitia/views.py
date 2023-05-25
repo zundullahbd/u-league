@@ -5,7 +5,7 @@ import locale
 import uuid
 from utils.query import *
 from django.views.decorators.csrf import csrf_exempt
-
+from manager import views as manager_views
 locale.setlocale(locale.LC_ALL, '')
 from django.views.decorators.csrf import csrf_exempt
 
@@ -81,8 +81,74 @@ def show_incomplete(request):
 def show_listperistiwa(request):
     return render(request, "listperistiwa.html")
 
+@csrf_exempt
 def show_tablelist(request):
-    return render(request, "tablelist.html")
+    context = {}
+    
+    username = request.session['username']
+    
+    tim1_query = query(f"""
+                        SELECT t.nama_tim, p.start_datetime, tp.skor
+                        FROM pertandingan p
+                        JOIN tim_pertandingan tp ON p.id_pertandingan = tp.id_pertandingan
+                        JOIN tim t ON tp.nama_tim = t.nama_tim
+                        LEFT JOIN tim_manajer tm ON t.nama_tim = tm.nama_tim
+                        LEFT JOIN rapat r ON tm.id_manajer = r.manajer_tim_a
+                        LEFT JOIN panitia pa ON r.perwakilan_panitia = pa.id_panitia
+                        WHERE pa.username = '{username}'
+                        GROUP BY 1, 2, 3""")
+    
+    tim2_query = query(f"""
+                        SELECT t.nama_tim, p.start_datetime , tp.skor
+                        FROM pertandingan p
+                        JOIN tim_pertandingan tp ON p.id_pertandingan = tp.id_pertandingan
+                        JOIN tim t ON tp.nama_tim = t.nama_tim
+                        LEFT JOIN tim_manajer tm ON t.nama_tim = tm.nama_tim
+                        LEFT JOIN rapat r ON tm.id_manajer = r.manajer_tim_b
+                        LEFT JOIN panitia pa ON r.perwakilan_panitia = pa.id_panitia
+                        WHERE pa.username = '{username}'
+                        GROUP BY 1, 2, 3""")
+    
+    nama_tim1 = tim1_query[0]['nama_tim']
+    nama_tim2 = tim2_query[0]['nama_tim']
+    
+    skor_tim1 = tim1_query[0]['skor']
+    skor_tim2 = tim2_query[0]['skor']
+    
+    pemenang_query = query(f"""
+                           SELECT 
+                           CASE 
+                           WHEN CAST('{skor_tim1}' AS INTEGER) > CAST('{skor_tim2}' AS INTEGER) THEN '{nama_tim1}'
+                           WHEN CAST('{skor_tim1}' AS INTEGER) < CAST('{skor_tim2}' AS INTEGER) THEN '{nama_tim2}'
+                           END AS pemenang
+                           FROM tim_pertandingan tp
+                           JOIN pertandingan p ON tp.id_pertandingan = p.id_pertandingan
+                           JOIN rapat r ON p.id_pertandingan = r.id_pertandingan
+                           JOIN panitia pa ON r.perwakilan_panitia = pa.id_panitia
+                           WHERE pa.username = '{username}'
+                           GROUP BY 1""")
+    
+                               
+    time_pertandingan = query(f"""
+                                    SELECT p.start_datetime
+                                    FROM pertandingan p
+                                    JOIN tim_pertandingan tp ON p.id_pertandingan = tp.id_pertandingan
+                                    JOIN tim t ON tp.nama_tim = t.nama_tim
+                                    LEFT JOIN tim_manajer tm ON t.nama_tim = tm.nama_tim
+                                    LEFT JOIN rapat r ON p.id_pertandingan = r.id_pertandingan
+                                    LEFT JOIN panitia pa ON r.perwakilan_panitia = pa.id_panitia
+                                    WHERE pa.username = '{username}'
+                                    GROUP BY 1""")
+                                    
+    
+    context = {
+        'tim1' : tim1_query,
+        'tim2' : tim2_query,
+        'pemenang' : pemenang_query,
+        'waktu' : time_pertandingan
+    }
+    
+    return render(request, "tablelist.html", context=context)
 
 def show_finished(request):
     return render(request, "finished.html")
@@ -99,3 +165,27 @@ def show_pertandingan(request):
             context = {'pertandingan': pertandingan}
 
             return render(request, 'pilihpertandingan.html', context)
+ 
+@csrf_exempt
+def manage_pertandingan(request):
+    username = request.session['username']
+    
+    list_pertandingan = query(f"""
+                              SELECT * from pertandingan
+                              JOIN peristiwa ON pertandingan.id_pertandingan = peristiwa.id_pertandingan
+                              JOIN wasit_bertugas ON pertandingan.id_pertandingan = wasit_bertugas.id_pertandingan
+                              JOIN tim_pertandingan ON pertandingan.id_pertandingan = tim_pertandingan.id_pertandingan
+                              LEFT JOIN rapat ON pertandingan.id_pertandingan = rapat.id_pertandingan
+                              WHERE perwakilan_panitia = '{username}'
+                              GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9""")
+    
+    print ("try")
+    print (list_pertandingan)
+    print (list_pertandingan[0]['id_pertandingan'])
+    
+    if list_pertandingan[0]['id_pertandingan'] == None:
+        print ("belum ada pertandingan")
+        print (list_pertandingan[0]['id_pertandingan'])
+        return HttpResponseRedirect(reverse('panitia:show_incomplete'))
+    
+    return HttpResponseRedirect(reverse('panitia:show_tablelist'))

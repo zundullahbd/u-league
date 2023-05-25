@@ -58,9 +58,16 @@
     </head>
     <body>
         <nav class="navbar" style="background-color:black">
-          {% for manager in data_manajer %}
-          <p class="font-weight-bold" style="color: white; padding-left: 10px;">{{manager.nama_depan| upper}} {{manager.nama_belakang|upper}} - MANAGER
+          {% if data_manajer %}
+          {% for manajer in data_manajer %}
+            <p class="font-weight-bold" style="color: white; padding-left: 10px;">
+              {{ manajer.nama_depan|upper }} {{ manajer.nama_belakang|upper }} - MANAGER
+            </p>
           {% endfor %}
+        {% else %}
+          <p class="font-weight-bold" style="color: white; padding-left: 10px;">Failed to fetch</p>
+        {% endif %}
+        
 
 
               <ul class="menu menu-horizontal p-0" style="size: 10px; float: right;">
@@ -86,6 +93,7 @@
                   </a>
               </li>
               </ul>
+            </p>
             <a href="{% url 'authentication:logout' %}" class="btn btn-sm font-weight-bold" style="background-color:#1f40cb; color: white;" >Logout</a>
             
           </nav>
