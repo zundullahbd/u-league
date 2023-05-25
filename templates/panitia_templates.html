@@ -61,11 +61,9 @@
             {% endfor %}
 
               <ul class="menu menu-horizontal p-0" style="size: 10px; float: right;">
-                <li><a2 href="/panitia/">Dashboard</a2></li>
+                <li><a href="{% url 'panitia:panitia_home' %}">Dashboard</a></li>
                 <li tabindex="0">
-                  <a2>
-                    Rapat
-                  </a2>
+                  <a href="{% url 'panitia:show_pertandingan' %}">Rapat</a> 
                 </li>
                 <li tabindex="0">
                   <a2>
