@@ -56,7 +56,19 @@ def show_rapat(request, id_pertandingan):
             print(pertandingan)
             context = {'pertandingan': pertandingan}
 
-            return render(request, 'rapat.html', context)    
+            return render(request, 'rapat.html', context)
+
+    if request.method == 'POST':
+        isi_rapat = request.POST.get("rapat")
+        
+        query(f"""UPDATE RAPAT 
+            SET isi_rapat = '{isi_rapat}'
+            WHERE id_pertandingan = '{id_pertandingan}'""")
+        
+        return HttpResponseRedirect(reverse('panitia:show_pertandingan'))
+    
+    return render(request, 'rapat.html')
+
 def mulai_pertandingan(request):
     return render(request, "mulaipertandingan.html")
 

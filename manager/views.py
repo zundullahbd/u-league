@@ -292,7 +292,7 @@ def extract_string_before_word(string, word):
 def show_listpemesanan(request):
     if request.method == 'GET':
 
-            pemesanan = query("""SELECT nama, start_datetime || ' - ' || end_datetime as waktu FROM stadium s, peminjaman p, manajer m where s.id_stadium = p.id_stadium AND m.id_manajer = p.id_manajer ORDER BY start_datetime asc;""")
+            pemesanan = query("""SELECT nama, date(start_datetime) || ' s.d. ' || date(end_datetime) as waktu FROM stadium s, peminjaman p, manajer m where s.id_stadium = p.id_stadium AND m.id_manajer = p.id_manajer ORDER BY start_datetime asc;""")
                 
             print(pemesanan)
             context = {'pemesanan': pemesanan}
