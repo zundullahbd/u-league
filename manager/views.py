@@ -287,3 +287,47 @@ def extract_string_before_word(string, word):
     else:
         # If the word is not found in the string
         return string
+
+# untuk CRU peminjaman Stadium
+def show_listpemesanan(request):
+    if request.method == 'GET':
+
+            pemesanan = query("""SELECT nama, start_datetime || ' - ' || end_datetime as waktu FROM stadium s, peminjaman p, manajer m where s.id_stadium = p.id_stadium AND m.id_manajer = p.id_manajer ORDER BY start_datetime asc;""")
+                
+            print(pemesanan)
+            context = {'pemesanan': pemesanan}
+
+            return render(request, 'listpemesan.html', context)
+
+def show_ketersediaanstadium(request):
+    context = {}
+    
+    stadium = query("""
+        SELECT id_stadium, nama
+        FROM stadium 
+        ;
+        """)
+
+    context = {
+        'stadium' : stadium
+        }
+    return render(request, "ketersediaanstadium.html", context)
+
+# def add_pesanstadium(request):
+#     context = {}
+#     # username = "amartusewicz2"
+#     # nama_tim = get_team(username)
+
+#     if request.method == 'POST':
+#         id_stadium = request.POST.get("stadium")    
+#         testtt = query(f"UPDATE PEMAIN SET Nama_Tim = '{nama_tim}' WHERE ID_Pemain = '{id_player}'")
+
+#         print(id_stadium)
+#         print(testtt)
+
+#     return HttpResponseRedirect(reverse('manager:show_ketersediaan'))
+
+def show_memesanstadium(request):
+    return render(request, "memesanstadium.html")
+
+
