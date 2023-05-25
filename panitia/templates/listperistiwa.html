@@ -12,8 +12,9 @@
         <h1 class="fw text-light text-4xl text-center"> Kelola Pertandingan </h1>
     </div> 
 
-    {% if nama_pemainA %}
+   
     <div class="p-3 mt-3 ml-2 mb-0 text-dark" style="text-align: center">
+      {% if request.path|slice:'-1' == nama_pemainA.0.nama_tim|slugify %}
         {% for nama in nama_pemainA %}
         <h4 class="fw"> Peristiwa Tim {{nama.nama_tim}} </h3>
         {% endfor %}
@@ -40,8 +41,9 @@
             </tbody>
           </table>
     </div>
-    {% else %}
+    
     <div class="p-3 mt-3 ml-2 mb-0 text-dark" style="text-align: center">
+      {% else %}
         {% for namaB in nama_pemainB %}
         <h4 class="fw"> Peristiwa Tim {{namaB.nama_tim}} </h3>
         {% endfor %}
