@@ -96,12 +96,24 @@ def register_manager(request):
             messages.error(request, "Mohon isi data dengan lengkap.")
             return render(request, 'managerlogin.html')
         
+        if ((username == "") or (password  == "" ) or (fname  == "") or (lname  == "")):
+            messages.error(request, "Mohon isi data dengan lengkap.")
+            return render(request, 'managerlogin.html')
+        
         if ((nomor_hp is None) or (email is None) or (alamat is None)):
+            messages.error(request, "Mohon isi data dengan lengkap.")
+            return render(request, 'managerlogin.html')
+        
+        if ((nomor_hp == "") or (email == "") or (alamat == "")):
             messages.error(request, "Mohon isi data dengan lengkap.")
             return render(request, 'managerlogin.html')
         
         if ((is_mhs is None) and (is_dosen is None) and (is_tendik is None) and (is_alumni is None) and (is_umum is None)):
             messages.error(request, "Mohon isi data dengan lengkap.")
+            return render(request, 'managerlogin.html')
+        
+        if ((is_mhs == "") and (is_dosen == "") and (is_tendik == "") and (is_alumni == "") and (is_umum == "")):
+            messages.error(request, "Mohon isi data dengan lengkap.")            
             return render(request, 'managerlogin.html')
 
         uname_check = insert_user_system(username, password)
@@ -158,11 +170,23 @@ def register_panitia(request):
             messages.error(request, "Mohon isi data dengan lengkap.")
             return render(request, 'panitialogin.html')
         
+        if ((username == "") or (password  == "" ) or (fname  == "") or (lname  == "")):
+            messages.error(request, "Mohon isi data dengan lengkap.")
+            return render(request, 'panitialogin.html')
+        
         if ((nomor_hp is None) or (email is None) or (alamat is None) or (jabatan is None)):
             messages.error(request, "Mohon isi data dengan lengkap.")
             return render(request, 'panitialogin.html')
         
+        if ((nomor_hp == "") or (email == "") or (alamat == "") or (jabatan == "")):
+            messages.error(request, "Mohon isi data dengan lengkap.")
+            return render(request, 'panitialogin.html')
+        
         if ((is_mhs is None) and (is_dosen is None) and (is_tendik is None) and (is_alumni is None) and (is_umum is None)):
+            messages.error(request, "Mohon isi data dengan lengkap.")            
+            return render(request, 'panitialogin.html')
+        
+        if ((is_mhs == "") and (is_dosen == "") and (is_tendik == "") and (is_alumni == "") and (is_umum == "")):
             messages.error(request, "Mohon isi data dengan lengkap.")            
             return render(request, 'panitialogin.html')
 
@@ -210,7 +234,7 @@ def register_penonton(request):
         is_alumni = request.POST.get('is_alumni')
         is_umum = request.POST.get('is_umum')
 
-        print("LIHAT YA DIA MASUK POST MANAJER GATAU KNP ya")
+        print("LIHAT YA DIA MASUK POST PENONTON GATAU KNP ya")
 
         print(username, fname, lname, nomor_hp, email, alamat, is_mhs, is_dosen, is_tendik, is_alumni, is_umum)
 
@@ -218,12 +242,24 @@ def register_penonton(request):
             messages.error(request, "Mohon isi data dengan lengkap.")
             return render(request, 'penontonlogin.html')
         
+        if ((username == "") or (password  == "" ) or (fname  == "") or (lname  == "")):
+            messages.error(request, "Mohon isi data dengan lengkap.")
+            return render(request, 'penontonlogin.html')
+        
         if ((nomor_hp is None) or (email is None) or (alamat is None)):
+            messages.error(request, "Mohon isi data dengan lengkap.")
+            return render(request, 'penontonlogin.html')
+        
+        if ((nomor_hp == "") or (email == "") or (alamat == "")):
             messages.error(request, "Mohon isi data dengan lengkap.")
             return render(request, 'penontonlogin.html')
         
         if ((is_mhs is None) and (is_dosen is None) and (is_tendik is None) and (is_alumni is None) and (is_umum is None)):
             messages.error(request, "Mohon isi data dengan lengkap.")
+            return render(request, 'penontonlogin.html')
+        
+        if ((is_mhs == "") and (is_dosen == "") and (is_tendik == "") and (is_alumni == "") and (is_umum == "")):
+            messages.error(request, "Mohon isi data dengan lengkap.")            
             return render(request, 'penontonlogin.html')
 
         uname_check = insert_user_system(username, password)
